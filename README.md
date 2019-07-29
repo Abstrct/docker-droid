@@ -28,7 +28,6 @@ Administering the bot is most easily done within the container. After starting t
 ```
 docker ps
 docker exec -it droid /bin/bash
-su schemaverse -c "psql schemaverse"
 ```
 
 
