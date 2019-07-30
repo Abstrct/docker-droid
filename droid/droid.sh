@@ -45,21 +45,24 @@ echo 'Maybe write that down or something...' >> /src/droid/logs.txt
 
 # Initiating Droid Session
 echo 'Attempting to get new session token' >> /src/droid/logs.txt
-while [ -z "$CD_TOKEN" ]
+CD_TOKEN=`curl -sS -X "POST" "https://api.coindroids.com/rpc/identify" -H 'Content-Type: application/json; charset=utf-8' --data "{\"username\": \"${PLAYER_USERNAME}\",\"password\":\"${PLAYER_PASSWORD}\" }" | jq -r '.[0].token'`
+while [ "$CD_TOKEN" = "null" ]
 do
   CD_TOKEN=`curl -sS -X "POST" "https://api.coindroids.com/rpc/identify" -H 'Content-Type: application/json; charset=utf-8' --data "{\"username\": \"${PLAYER_USERNAME}\",\"password\":\"${PLAYER_PASSWORD}\" }" | jq -r '.[0].token'`
 done
 echo "${CD_TOKEN}"
 
 echo 'Finding Defcoin droid for player' >> /src/droid/logs.txt
-while [ -z "$DROID_ID" ]
+DROID_ID=`curl -sS "https://api.coindroids.com/droid?currency_id=eq.2&select=id&username%20=eq.${PLAYER_USERNAME}" | jq -r '.[0].id'`
+while [ "$DROID_ID" = "null" ]
 do
   DROID_ID=`curl -sS "https://api.coindroids.com/droid?currency_id=eq.2&select=id&username%20=eq.${PLAYER_USERNAME}" | jq -r '.[0].id'`
 done
 echo "Found Droid ID #${DROID_ID}" >> /src/droid/logs.txt
 
 # Sync wallet to droid
-while [ -z "$SYNC_ADDRESS" ]
+SYNC_ADDRESS=`curl -sS -X "POST" "https://api.coindroids.com/rpc/get_droid_registration_address"  -H "Authorization: Bearer ${CD_TOKEN}" -H 'Content-Type: application/json; charset=utf-8' --data "{ \"droid_id\": \"${DROID_ID}\"}"  | jq -r '.[0].get_droid_registration_address'`
+while [ "$SYNC_ADDRESS" = "null" ]
 do
   SYNC_ADDRESS=`curl -sS -X "POST" "https://api.coindroids.com/rpc/get_droid_registration_address"  -H "Authorization: Bearer ${CD_TOKEN}" -H 'Content-Type: application/json; charset=utf-8' --data "{ \"droid_id\": \"${DROID_ID}\"}"  | jq -r '.[0].get_droid_registration_address'`
 done
