@@ -80,7 +80,7 @@ do
 
 	if [ $OGBLOCK != $NEWBLOCK ]; then
 		# find my target
-		TARGET=`curl -s -H "Range: 0-0" -X "GET" "https://api.coindroids.com/droid?select=name,id,attack_address&order=bounty.desc&health_current=gt.0&currency_id=eq.2&id=neq.${DROID_ID}" | jq ".[] | .attack_address" | tr -d '"'`
+		TARGET=`curl -s -H "Range: 0-0" -X "GET" "https://api.coindroids.com/droid?select=name,id,attack_address&order=bounty.desc&health_current=gt.0&is_active=eq.true&currency_id=eq.2&id=neq.${DROID_ID}" | jq ".[] | .attack_address" | tr -d '"'`
 		echo Target Address: $TARGET
 
 		echo =`curl -s -H "Range: 0-0" -X "GET" "https://api.coindroids.com/droid?select=name,id,attack_address&order=health_current.asc&health_current=gt.0&currency_id=eq.2&id=neq.${DROID_ID}"`
