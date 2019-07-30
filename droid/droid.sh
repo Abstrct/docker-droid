@@ -25,7 +25,7 @@ echo 'Sync complete' >> /src/droid/logs.txt
 
 # Check to see if there is a usable balance 
 balance=`/src/droid/client/bin/defcoin-cli -conf=/src/droid/client/data/defcoin.conf getbalance`
-deposit_address=`/src/droid/client/bin/defcoin-cli -conf=/src/droid/client/data/defcoin.conf getaddressesbyaccount "" | jq -r '.[]'`
+deposit_address=`/src/droid/client/bin/defcoin-cli -conf=/src/droid/client/data/defcoin.conf getaddressesbyaccount "" | jq -r '.[0]'`
 echo 'Checking on wallet status, balance needed before starting bot' >> /src/droid/logs.txt
 while (( $(echo "${balance} == 0.0" | bc -l ) ))
 do
@@ -81,7 +81,7 @@ do
 	if [ $OGBLOCK != $NEWBLOCK ]; then
 		# find my target
 		TARGET=`curl -s -H "Range: 0-0" -X "GET" "https://api.coindroids.com/droid?select=name,id,attack_address&order=bounty.desc&health_current=gt.0&is_active=eq.true&currency_id=eq.2&id=neq.${DROID_ID}" | jq ".[] | .attack_address" | tr -d '"'`
-		echo Target Address: $TARGET
+		echo Target Address: $TARGET >> /src/droid/logs.txt
 
 		echo =`curl -s -H "Range: 0-0" -X "GET" "https://api.coindroids.com/droid?select=name,id,attack_address&order=health_current.asc&health_current=gt.0&currency_id=eq.2&id=neq.${DROID_ID}"`
 
@@ -90,10 +90,10 @@ do
 
 		# find my clip size
 		CLIPSIZE=`curl -s -H "Range: 0-0" -X "GET" "https://api.coindroids.com/droid?id=eq.${DROID_ID}&select=attribute.clip_size" | jq ".[] | .[] | .clip_size"`
-		echo Clip Size: $CLIPSIZE
+		echo Clip Size: $CLIPSIZE >> /src/droid/logs.txt
 
 		# shoot the target
-		echo FIRING AT $NAME !!! $CLIPSIZE at $TARGET
+		echo FIRING AT $NAME !!! $CLIPSIZE at $TARGET >> /src/droid/logs.txt
 		/src/droid/client/bin/defcoin-cli -conf=/src/droid/client/data/defcoin.conf sendtoaddress $TARGET 0.0$CLIPSIZE
 
 	fi
