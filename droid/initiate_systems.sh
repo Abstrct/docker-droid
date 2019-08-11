@@ -5,11 +5,13 @@
 #########################
 #########################
 
-wget https://static.coindroids.com/defcoin-bootstrap.dat.tgz 
-tar -zxf defcoin-bootstrap.dat.tgz
-mv bootstrap.dat /src/droid/client/data/bootstrap.dat
-chown droid /src/droid/client/data/bootstrap.dat
-rm -rf defcoin-bootstrap.dat.tgz
+if [ ! -f "/src/droid/client/data/bootstrap.dat.old" ]; then
+	wget https://static.coindroids.com/defcoin-bootstrap.dat.tgz 
+	tar -zxf defcoin-bootstrap.dat.tgz
+	mv bootstrap.dat /src/droid/client/data/bootstrap.dat
+	chown droid /src/droid/client/data/bootstrap.dat
+	rm -rf defcoin-bootstrap.dat.tgz
+fi
 
 su droid -c '/src/droid/client/bin/defcoind -conf=/src/droid/client/data/defcoin.conf'
 echo 'Defcoin Node initiating'
