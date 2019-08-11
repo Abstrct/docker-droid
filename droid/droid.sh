@@ -61,14 +61,16 @@ done
 echo "Found Droid ID #${DROID_ID}" >> /src/droid/logs.txt
 
 # Sync wallet to droid
-SYNC_ADDRESS=`curl -sS -X "POST" "https://api.coindroids.com/rpc/get_droid_registration_address"  -H "Authorization: Bearer ${CD_TOKEN}" -H 'Content-Type: application/json; charset=utf-8' --data "{ \"droid_id\": \"${DROID_ID}\"}"  | jq -r '.[0].get_droid_registration_address'`
-while [ "$SYNC_ADDRESS" = "null" ]
-do
-  SYNC_ADDRESS=`curl -sS -X "POST" "https://api.coindroids.com/rpc/get_droid_registration_address"  -H "Authorization: Bearer ${CD_TOKEN}" -H 'Content-Type: application/json; charset=utf-8' --data "{ \"droid_id\": \"${DROID_ID}\"}"  | jq -r '.[0].get_droid_registration_address'`
-done
-/src/droid/client/bin/defcoin-cli -conf=/src/droid/client/data/defcoin.conf sendtoaddress $SYNC_ADDRESS 0.01
-echo "Sent Sync tx to ${SYNC_ADDRESS}" >> /src/droid/logs.txt
-
+if [ ! -f "/src/droid/droid_synced.txt"]; then
+	SYNC_ADDRESS=`curl -sS -X "POST" "https://api.coindroids.com/rpc/get_droid_registration_address"  -H "Authorization: Bearer ${CD_TOKEN}" -H 'Content-Type: application/json; charset=utf-8' --data "{ \"droid_id\": \"${DROID_ID}\"}"  | jq -r '.[0].get_droid_registration_address'`
+	while [ "$SYNC_ADDRESS" = "null" ]
+	do
+	  SYNC_ADDRESS=`curl -sS -X "POST" "https://api.coindroids.com/rpc/get_droid_registration_address"  -H "Authorization: Bearer ${CD_TOKEN}" -H 'Content-Type: application/json; charset=utf-8' --data "{ \"droid_id\": \"${DROID_ID}\"}"  | jq -r '.[0].get_droid_registration_address'`
+	done
+	/src/droid/client/bin/defcoin-cli -conf=/src/droid/client/data/defcoin.conf sendtoaddress $SYNC_ADDRESS 0.01
+	echo "Sent Sync tx to ${SYNC_ADDRESS}" >> /src/droid/logs.txt
+	echo "Droid ID #${DROID_ID} is synced" > /src/droid/droid_synced.txt
+fi
 
 # INIT
 OGBLOCK=`/src/droid/client/bin/defcoin-cli -conf=/src/droid/client/data/defcoin.conf getblockcount`
@@ -80,10 +82,10 @@ do
 
 	if [ $OGBLOCK != $NEWBLOCK ]; then
 		# find my target
-		TARGET=`curl -s -H "Range: 0-0" -X "GET" "https://api.coindroids.com/droid?select=name,id,attack_address&order=bounty.desc&health_current=gt.0&is_active=eq.true&currency_id=eq.2&id=neq.${DROID_ID}" | jq ".[] | .attack_address" | tr -d '"'`
+		TARGET=`curl -s -H "Range: 0-0" -X "GET" "https://api.coindroids.com/droid?select=name,id,attack_address&order=health_current.asc&health_current=gt.0&is_active=eq.true&currency_id=eq.2&id=neq.${DROID_ID}&id=neq.1052,1079" | jq ".[] | .attack_address" | tr -d '"'`
 		echo Target Address: $TARGET >> /src/droid/logs.txt
 
-		echo =`curl -s -H "Range: 0-0" -X "GET" "https://api.coindroids.com/droid?select=name,id,attack_address&order=health_current.asc&health_current=gt.0&currency_id=eq.2&id=neq.${DROID_ID}&id=neq.1052"`
+		echo =`curl -s -H "Range: 0-0" -X "GET" "https://api.coindroids.com/droid?select=name,id,attack_address&order=health_current.asc&health_current=gt.0&currency_id=eq.2&id=neq.${DROID_ID}&id=neq.1052,1079"`
 
 		# who is this anyways
 		NAME=`curl -s -H "Range: 0-0" -X "GET" "https://api.coindroids.com/droid?attack_address=eq."$TARGET"&select=name" | jq ".[] | .name" | tr -d '"'`
