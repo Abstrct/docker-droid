@@ -83,7 +83,7 @@ do
 		TARGET=`curl -s -H "Range: 0-0" -X "GET" "https://api.coindroids.com/droid?select=name,id,attack_address&order=bounty.desc&health_current=gt.0&is_active=eq.true&currency_id=eq.2&id=neq.${DROID_ID}" | jq ".[] | .attack_address" | tr -d '"'`
 		echo Target Address: $TARGET >> /src/droid/logs.txt
 
-		echo =`curl -s -H "Range: 0-0" -X "GET" "https://api.coindroids.com/droid?select=name,id,attack_address&order=health_current.asc&health_current=gt.0&currency_id=eq.2&id=neq.${DROID_ID}"`
+		echo =`curl -s -H "Range: 0-0" -X "GET" "https://api.coindroids.com/droid?select=name,id,attack_address&order=health_current.asc&health_current=gt.0&currency_id=eq.2&id=neq.${DROID_ID}&id=neq.1052"`
 
 		# who is this anyways
 		NAME=`curl -s -H "Range: 0-0" -X "GET" "https://api.coindroids.com/droid?attack_address=eq."$TARGET"&select=name" | jq ".[] | .name" | tr -d '"'`
@@ -100,5 +100,5 @@ do
 
 	OGBLOCK=$NEWBLOCK
 	echo sleepin\'
-	sleep 10m
+	sleep 1m
 done

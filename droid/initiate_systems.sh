@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+#########################
+#########################
+#########################
+#########################
+
 wget https://static.coindroids.com/defcoin-bootstrap.dat.tgz 
 tar -zxf defcoin-bootstrap.dat.tgz
 mv bootstrap.dat /src/droid/client/data/bootstrap.dat
