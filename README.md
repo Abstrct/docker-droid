@@ -25,8 +25,10 @@ This should be persistent, but it is still a rudamentary droid with basic logic.
 ## Build your droid and start it
 > If you want to run multiple, you will need to change "defaultdroidname" in start.sh as each docker needs a unique name
 ```
-git clone git@github.com:abstrct/docker-droid.git
+git clone https://github.com/abstrct/docker-droid.git
 cd docker-droid
+chmod +x start.sh
+chmod +x start_droid.sh
 ./start.sh
 ```
 ## To restart your droid
@@ -42,7 +44,7 @@ cd docker-droid
 > If you want to run multiple, you will need to change "defaultdroidname" as each docker needs a unique name
 ## How to Build
 ```
-git clone git@github.com:abstrct/docker-droid.git
+git clone https://github.com/abstrct/docker-droid.git
 cd docker-droid
 sudo docker volume create defaultdroidname
 sudo docker build .

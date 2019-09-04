@@ -4,18 +4,23 @@
 # Totes stolen from DETH-MASHENE, thnx robo-bro
 
 echo 'Droid started but waiting while defcoind boots' >> /src/droid/logs.txt
-echo 'Defcoind started with a snapshot, so it will sync a lot faster than normal but still might take 30-60min' >> /src/droid/logs.txt
+sleep 15s
 # This line might need to be updated as the new average should be lower with it not indexing everything
 # might mean removing all the "takes long time, looks like going backwards stuff"
 
 
 deposit_address=`/src/droid/client/bin/defcoin-cli -conf=/src/droid/client/data/defcoin.conf getaddressesbyaccount "" | jq -r '.[0]'`
-########################
-#might need to wait for defcoind to finish starting!!!
-########################
+while [ ${deposit_address} -le 5 ]
+do
+	sleep 15s
+	deposit_address=`/src/droid/client/bin/defcoin-cli -conf=/src/droid/client/data/defcoin.conf getaddressesbyaccount "" | jq -r '.[0]'`
+done
+
 
 #-> now print something like 
+echo ""  >> /src/droid/logs.txt
 echo "While defcoind is syncing, you can go ahead and load funds into it if you have not already (or know it is empty). Send funds to ${deposit_address}. if you would rather wait for sync to finish, this will check the balance of this wallet after it has finished. If there is not a useable balance, it will ask for funds to be sent and wait for them (do not worry about forgetting the addr as it will be printed again)." >> /src/droid/logs.txt
+echo ""  >> /src/droid/logs.txt
 #-> this is more useful for when importing the bootstrap.dat as that takes a long time
 
 #add a line or 2 of blank space (or maybe even -------/======= line) between items to make it not display as a giant blob of text and instead as "steps"
@@ -29,6 +34,7 @@ echo ""  >> /src/droid/logs.txt
 ###############################################################
 # prob need a diff print out for when not importing bootstrap but just catching up
 ###############################################################
+echo 'Defcoind started with a snapshot, so it will sync a lot faster than normal but still might take 30-60min' >> /src/droid/logs.txt
 progress=`/src/droid/client/bin/defcoin-cli -conf=/src/droid/client/data/defcoin.conf getblockchaininfo | jq -r '.verificationprogress'`
 progress=`awk "BEGIN { print ${progress} + 0.01 }"`
 echo 'Checking on wallet status, must be up to date before starting bot' >> /src/droid/logs.txt
