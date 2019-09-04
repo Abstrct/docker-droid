@@ -1,14 +1,7 @@
 #!/usr/bin/env bash
 
-#########################
-#########################
-#########################
-#########################
-
-#if [ ! -f "/src/droid/client/data/bootstrap.dat.old" ]; then
-
-#defcoin-bootstrap.dat.tgz.2 was made...so maybe i need to check for this file as looking for ***.old did not work as it downloaded it again
-#if [ ! -f "defcoin-bootstrap.dat.tgz" ]; then
+# Should look for bootstrap.dat.old, but for some reason that method wasn't working
+# Or looking for downloaded/extracted files, but again was not having luck
 if [ ! -f "/src/droid/bootstrap_downloaded.txt" ]; then
 	wget https://static.coindroids.com/defcoin-bootstrap.dat.tgz
 	tar -zxf defcoin-bootstrap.dat.tgz
