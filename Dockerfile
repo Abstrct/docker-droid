@@ -42,11 +42,8 @@ COPY client/data/* /src/droid/client/data/
 
 
 
-# Setup droid process
-COPY droid/droid.sh /src/droid/droid.sh
-
-
-COPY droid/initiate_systems.sh /src/droid/initiate_systems.sh
+# Setup droid process and the attack filters you have created
+COPY droid/* /src/droid/
 
 
 RUN chown -R droid /src/droid && \

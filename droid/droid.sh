@@ -10,7 +10,7 @@ sleep 15s
 
 
 deposit_address=`/src/droid/client/bin/defcoin-cli -conf=/src/droid/client/data/defcoin.conf getaddressesbyaccount "" | jq -r '.[0]'`
-while [ ${deposit_address} -le 5 ]
+while [ ${#deposit_address} -le 5 ]
 do
 	sleep 15s
 	deposit_address=`/src/droid/client/bin/defcoin-cli -conf=/src/droid/client/data/defcoin.conf getaddressesbyaccount "" | jq -r '.[0]'`
