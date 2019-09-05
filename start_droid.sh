@@ -1,20 +1,22 @@
-if [ -f "img_iden.txt" ]; then
-	# Restarting droid, so should have identifier saved
-	img_iden="`cat img_iden.txt`"
+if [ ! -f "first_run_done.txt" ]; then
+	if [ -f "img_iden.txt" ]; then
+		# Restarting droid, so should have identifier saved
+		img_iden="`cat img_iden.txt`"
+	else
+		# First time so human must retype (or copy paste) string
+		# There is probably a much shorter way to phrase this
+		read -p "Look above for 'Successfully built'. This is the build image identifier. Type it here (12 numbers and letters):  " img_iden
+		# This way you have an easy way to get a copy of the image identifier in the future
+		echo ${img_iden} > img_iden.txt
+	fi
+
+	read -p 'Coindroids Username:  ' cd_user
+	read -sp 'Coindroids Password:  ' cd_pass
+	# If you would rather not have to type the Coindroids cred in, you can hardcode them in below ("user" and "pass" as they need to be in quotes)
+	sudo docker run -it --mount source=defaultdroidname,target=/src --name=defaultdroidname -e PLAYER_USERNAME=${cd_user} -e PLAYER_PASSWORD=${cd_pass} ${img_iden}
+	echo "run done, should be able to just restart now" > first_run_done.txt
 else
-	# First time so human must retype (or copy paste) string
-	# There is probably a much shorter way to phrase this
-	read -p "Look above for 'Successfully built'. This is the build image identifier. Type it here (12 numbers and letters):  " img_iden
-	# This way you have an easy way to get a copy of the image identifier in the future
-	echo ${img_iden} > img_iden.txt
+	sudo docker restart defaultdroidname
+	# Comment out the following line if you want it to run in the background
+	sudo docker exec -it defaultdroidname tail -f /src/droid/logs.txt
 fi
-
-read -p 'Coindroids Username:  ' cd_user
-read -sp 'Coindroids Password:  ' cd_pass
-sudo docker run -it --mount source=defaultdroidname,target=/src --name=defaultdroidname -e PLAYER_USERNAME=${cd_user} -e PLAYER_PASSWORD=${cd_pass} ${img_iden}
-
-
-
-
-# If you would rather your login creds be saved, you can enter them below (and the image identifier) and comment out everything up top
-#sudo docker run -it --mount source=defaultdroidname,target=/src --name=defaultdroidname -e PLAYER_USERNAME="<Your Coindroids Username>" -e PLAYER_PASSWORD="<Your Coindroids Password>" <the build image identifier from the build step >

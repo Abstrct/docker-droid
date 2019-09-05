@@ -1,7 +1,7 @@
 # docker-droid
 
 Docker container for running a rough Coindroids bot
-[Coindroids](https://coindroids.com/) for [Docker](https://www.docker.com).
+[Coindroids](https://coindroids.com/) with [Docker](https://www.docker.com).
 
 
 # Before you begin
@@ -34,7 +34,7 @@ chmod +x start_droid.sh
 ##########################################
 ./start.sh
 ```
-## To restart your droid
+## Start your droid again
 ```
 #navigate to docker-droid
 ./start_droid.sh
@@ -78,6 +78,15 @@ Administering the bot is most easily done within the container. After starting t
 ```
 sudo docker ps
 sudo docker exec -it defaultdroidname /bin/bash
+```
+
+## Start droid again
+```
+sudo docker restart defaultdroidname
+```
+And to get output
+```
+sudo docker exec -it defaultdroidname tail -f /src/droid/logs.txt
 ```
 
 # Additional Attack Filters

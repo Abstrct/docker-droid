@@ -167,7 +167,7 @@ do
 	fi
 
 	OGBLOCK=$NEWBLOCK
-	echo sleepin\'
+	echo sleepin\' during $NEWBLOCK  >> /src/droid/logs.txt
 	sleep 1m
 
 	balance=`/src/droid/client/bin/defcoin-cli -conf=/src/droid/client/data/defcoin.conf getbalance`
