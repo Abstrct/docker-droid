@@ -1,3 +1,5 @@
+container_name="`cat container_name.txt`"
+
 if [ ! -f "first_run_done.txt" ]; then
 	if [ -f "img_iden.txt" ]; then
 		# Restarting droid, so should have identifier saved
@@ -13,10 +15,10 @@ if [ ! -f "first_run_done.txt" ]; then
 	read -p 'Coindroids Username:  ' cd_user
 	read -sp 'Coindroids Password:  ' cd_pass
 	# If you would rather not have to type the Coindroids cred in, you can hardcode them in below ("user" and "pass" as they need to be in quotes)
-	sudo docker run -it --mount source=defaultdroidname,target=/src --name=defaultdroidname -e PLAYER_USERNAME=${cd_user} -e PLAYER_PASSWORD=${cd_pass} ${img_iden}
+	sudo docker run -it --mount source=${container_name},target=/src --name=${container_name} -e PLAYER_USERNAME=${cd_user} -e PLAYER_PASSWORD=${cd_pass} ${img_iden}
 	echo "run done, should be able to just restart now" > first_run_done.txt
 else
-	sudo docker restart defaultdroidname
+	sudo docker restart ${container_name}
 	# Comment out the following line if you want it to run in the background
-	sudo docker exec -it defaultdroidname tail -f /src/droid/logs.txt
+	sudo docker exec -it ${container_name} tail -f /src/droid/logs.txt
 fi

@@ -16,22 +16,26 @@ sudo apt install docker.io
 
 # WARNING
 <del>If you close the script and shutdown the container, you'll likely lose any keys you haven't backed up. Keep in mind that as transactions are made, you'll be creating new change addresses which, even if you backed up the original key, means you've now backed up nothing. Honestly, I'd only really send this bot ~1dfc until we improve the backup process.</del>
+
 This should be persistent, but it is still a rudamentary droid with basic logic. Still better off just sending it a few dfc max, topping it off as needed.
 
 
+# container name
+If you are only running 1 droid, this shouldn't matter at all to you. If you are running more than 1 droid on the same machine, each needs a unique name. The file container_name.txt is where you should put the name you want for the conttainer for this droid.
+> Could have made it increment defaultdroidname001/002/003..., but decided not to because then it would make container administration more difficult.
+For all of the commands listed here, you would need to manually substitute the chosen container name. Pointing it out for troubleshooting purposes.
 
 
 # Simple Mode
 ## Build your droid and start it
-> If you want to run multiple, you will need to change "defaultdroidname" in start.sh and start_droid.sh as each docker needs a unique name
 ```
 git clone https://github.com/G4te-Keep3r/docker-droid.git
 cd docker-droid
-chmod +x start.sh
-chmod +x start_droid.sh
+
 ##########################################
 # If you want to adjust the attack filters, do it now before running the next command.
 ##########################################
+
 ./start.sh
 ```
 ## Start your droid again
@@ -39,6 +43,11 @@ chmod +x start_droid.sh
 #navigate to docker-droid
 ./start_droid.sh
 ```
+## Administration
+```
+./admin_droid.sh
+```
+
 > Refer to below for how to tweak your droid
 
 
@@ -77,6 +86,8 @@ Administering the bot is most easily done within the container. After starting t
 
 ```
 sudo docker ps
+# ps is more for formality just to show you what all you have running
+
 sudo docker exec -it defaultdroidname /bin/bash
 ```
 
