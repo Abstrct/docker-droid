@@ -29,7 +29,7 @@ For all of the commands listed here, you would need to manually substitute the c
 # Simple Mode
 ## Build your droid and start it
 ```
-git clone https://github.com/G4te-Keep3r/docker-droid.git
+git clone https://github.com/Abstrct/docker-droid
 cd docker-droid
 
 ##########################################
@@ -37,6 +37,13 @@ cd docker-droid
 ##########################################
 
 ./start.sh
+
+
+
+##########################################
+# ignore this. Once updates are finished, Abstrct's readme will point to his repo and mine to mine
+##########################################
+git clone https://github.com/G4te-Keep3r/docker-droid.git
 ```
 ## Start your droid again
 ```
